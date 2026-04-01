@@ -1,6 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import { BadgeHelp, House, ShoppingBag, Sparkles, Phone, Menu, X } from "lucide-react";
 
 type Product = {
   id: number;
@@ -81,10 +83,10 @@ const testimonials = [
 ];
 
 const navLinks = [
-  { href: "#home", label: "Home" },
-  { href: "#services", label: "Services" },
-  { href: "#products", label: "Products" },
-  { href: "#contact", label: "Contact" },
+  { href: "#home", label: "Home", icon: House },
+  { href: "#services", label: "Services", icon: Sparkles },
+  { href: "#products", label: "Products", icon: ShoppingBag },
+  { href: "#contact", label: "Contact", icon: Phone },
 ];
 
 type BookingFormData = {
@@ -249,28 +251,32 @@ export default function Home() {
           <nav className="glass-floating flex items-center justify-between rounded-full px-4 py-3 md:px-6">
             <a
               href="#home"
-              className="brand-mark text-lg md:text-xl"
+              className="brand-mark flex items-center gap-2 text-lg md:text-xl"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Zuri Luxe
+              <Image src="/luxe-logo.png" alt="Zuri Luxe" width={40} height={40} className="rounded-full" priority />
+              <span className="hidden sm:inline">Zuri Luxe</span>
             </a>
 
-            <div className="hidden items-center gap-6 text-sm font-semibold md:flex">
+            <div className="hidden items-center gap-3 text-sm font-semibold md:flex">
               {navLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
-                  className={`nav-link ${activeSection === link.href.slice(1) ? "nav-link-active" : ""}`}
+                  className={`nav-icon-link ${activeSection === link.href.slice(1) ? "nav-link-active" : ""}`}
+                  aria-label={link.label}
+                  title={link.label}
                   aria-current={activeSection === link.href.slice(1) ? "page" : undefined}
                 >
-                  {link.label}
+                  <link.icon size={17} strokeWidth={2.2} />
                 </a>
               ))}
             </div>
 
             <div className="flex items-center gap-2">
-              <button type="button" className="cart-chip" aria-label="Items in cart">
-                Cart {cartCount}
+              <button type="button" className="cart-chip" aria-label="Items in cart" title="Cart">
+                <ShoppingBag size={15} />
+                <span>{cartCount}</span>
               </button>
               <button
                 type="button"
@@ -279,7 +285,7 @@ export default function Home() {
                 aria-expanded={isMobileMenuOpen}
                 onClick={() => setIsMobileMenuOpen((prev) => !prev)}
               >
-                {isMobileMenuOpen ? "Close" : "Menu"}
+                {isMobileMenuOpen ? <X size={16} /> : <Menu size={16} />}
               </button>
             </div>
           </nav>
@@ -297,11 +303,13 @@ export default function Home() {
                     aria-current={activeSection === link.href.slice(1) ? "page" : undefined}
                     onClick={handleNavLinkClick}
                   >
-                    {link.label}
+                    <link.icon size={16} />
+                    <span>{link.label}</span>
                   </a>
                 ))}
                 <button type="button" className="primary-cta mt-2 justify-center" onClick={openBooking}>
-                  Book Consultation
+                  <BadgeHelp size={16} />
+                  <span>Book Consultation</span>
                 </button>
               </div>
             </div>
@@ -401,20 +409,20 @@ export default function Home() {
               Total: ${cartTotal.toFixed(2)}
             </p>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
             {products.map((product) => (
-              <article key={product.id} className="glass-panel card-hover rounded-2xl p-5">
-                <div className="product-thumb mb-4 h-36 rounded-xl" />
-                <h3 className="text-base font-bold text-[#562842]">{product.name}</h3>
-                <p className="mt-2 min-h-12 text-sm text-[#775067]">{product.description}</p>
-                <div className="mt-4 flex items-center justify-between">
-                  <span className="text-lg font-extrabold text-[#c03a7a]">${product.price}</span>
+              <article key={product.id} className="glass-panel card-hover rounded-2xl p-3">
+                <div className="product-thumb mb-3 h-24 rounded-lg" />
+                <h3 className="text-sm font-bold text-[#562842]">{product.name}</h3>
+                <p className="mt-1 min-h-10 text-xs text-[#775067]">{product.description}</p>
+                <div className="mt-3 flex items-center justify-between">
+                  <span className="text-sm font-extrabold text-[#c03a7a]">${product.price}</span>
                   <button
                     type="button"
-                    className="secondary-cta !px-3 !py-2 text-sm"
+                    className="secondary-cta !px-2.5 !py-1.5 text-xs"
                     onClick={() => addToCart(product.id)}
                   >
-                    Add
+                    <ShoppingBag size={13} />
                   </button>
                 </div>
                 <button
